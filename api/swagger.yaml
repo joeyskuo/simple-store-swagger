@@ -1,0 +1,389 @@
+---
+swagger: "2.0"
+info:
+  description: "`"
+  version: "1.0.0"
+  title: "simple-store-api"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "joeyskuo@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "simple-store-api.com"
+basePath: "/"
+tags:
+- name: "item"
+  description: "Item details and inventory"
+- name: "store"
+  description: "Store details and inventory"
+- name: "user"
+  description: "User registration and authorization"
+schemes:
+- "https"
+- "http"
+paths:
+  /items:
+    get:
+      tags:
+      - "item"
+      summary: "List all items"
+      operationId: "itemsGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/inline_response_200"
+      x-swagger-router-controller: "Item"
+  /item/{itemName}:
+    get:
+      tags:
+      - "item"
+      summary: "Find item by name"
+      operationId: "itemItemNameGET"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "JWT {token}"
+        in: "header"
+        description: "Access token from logging in. **Only required for this operation"
+        required: true
+        type: "string"
+      - name: "itemName"
+        in: "path"
+        description: "Name of item to get details for"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/inline_response_200_1"
+        401:
+          description: "Invalid token"
+          schema:
+            $ref: "#/definitions/inline_response_401"
+      x-swagger-router-controller: "Item"
+    post:
+      tags:
+      - "item"
+      summary: "Add a new item to the store"
+      operationId: "addItem"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "itemName"
+        in: "path"
+        description: "Name of item to add"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/Item"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/inline_response_200_2"
+        400:
+          description: "item already exists"
+          schema:
+            $ref: "#/definitions/inline_response_400"
+      x-swagger-router-controller: "Item"
+    put:
+      tags:
+      - "item"
+      summary: "Update an existing item"
+      operationId: "updatePet"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "itemName"
+        in: "path"
+        description: "Name of item to add/update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/Item"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/inline_response_200_2"
+      x-swagger-router-controller: "Item"
+    delete:
+      tags:
+      - "item"
+      summary: "Deletes an item"
+      operationId: "deletePet"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "itemName"
+        in: "path"
+        description: "Name of item to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/inline_response_200_3"
+      x-swagger-router-controller: "Item"
+  /stores:
+    get:
+      tags:
+      - "store"
+      summary: "List all stores and corresponding inventory"
+      operationId: "getInventory"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/inline_response_200_4"
+      x-swagger-router-controller: "Store"
+  /store/{storeName}:
+    post:
+      tags:
+      - "store"
+      summary: "Create a store"
+      operationId: "loginUser22"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "storeName"
+        in: "path"
+        description: "Name of store to create"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/inline_response_200_5"
+        400:
+          description: "store already exists"
+          schema:
+            $ref: "#/definitions/inline_response_400_1"
+      x-swagger-router-controller: "Store"
+    delete:
+      tags:
+      - "store"
+      summary: "Delete store by name"
+      operationId: "storeStoreNameDELETE"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "storeName"
+        in: "path"
+        description: "Name of store to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/inline_response_200_6"
+      x-swagger-router-controller: "Store"
+  /register:
+    post:
+      tags:
+      - "user"
+      summary: "Create a new user"
+      operationId: "loginUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Token"
+        400:
+          description: "username already exists"
+          schema:
+            $ref: "#/definitions/Message"
+      x-swagger-router-controller: "User"
+  /auth:
+    post:
+      tags:
+      - "user"
+      summary: "Login and receive token"
+      operationId: "loginUser1"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Token"
+        401:
+          description: "Invalid username/password supplied"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+definitions:
+  Item:
+    type: "object"
+    properties:
+      price:
+        type: "number"
+        format: "float"
+        example: 59.99
+      store_id:
+        type: "integer"
+        format: "int32"
+        example: 1
+  Message:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "A user with that username already exists"
+  Token:
+    type: "object"
+    properties:
+      access_token:
+        type: "string"
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MDA2MDg3NjYsImlkZW50aXR5IjoxLCJuYmYiOjE1MDA2MDg3NjYsImV4cCI6MTUwMDYwOTA2Nn0.CdD6pa75e2iGGDYXJa7B8annmhUrgqRMMspZE_GLSr0"
+  Error:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+        example: "Invalid credentials"
+      error:
+        type: "string"
+        example: "Bad Request"
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        example: "user2"
+      password:
+        type: "string"
+        example: "password2"
+  inline_response_200:
+    properties:
+      items_:
+        type: "array"
+        example:
+        - name: "piano"
+          price: 17.99
+        - name: "chair"
+          price: 15.99
+        items:
+          type: "object"
+          properties: {}
+  inline_response_200_1:
+    properties:
+      name:
+        type: "string"
+        example: "chair"
+      price:
+        type: "number"
+        example: 15.9900000000000002131628207280300557613372802734375
+  inline_response_401:
+    properties:
+      description:
+        type: "string"
+        example: "Signature verification failed"
+      error:
+        type: "string"
+        example: "Invalid token"
+      status_code:
+        type: "number"
+        example: 401
+  inline_response_200_2:
+    properties:
+      name:
+        type: "string"
+        example: "piano"
+      price:
+        type: "number"
+        format: "float"
+        example: 17.99
+  inline_response_400:
+    properties:
+      message:
+        type: "string"
+        example: "An item with name 'chair' already exists."
+  inline_response_200_3:
+    properties:
+      message:
+        type: "string"
+        example: "Item deleted"
+  inline_response_200_4:
+    properties:
+      stores:
+        type: "array"
+        example:
+        - items:
+          - name: "chair"
+            price: 15.99
+          name: "store1"
+        items:
+          type: "object"
+          properties: {}
+  inline_response_200_5:
+    properties:
+      name:
+        type: "string"
+        example: "store1"
+      items_:
+        type: "array"
+        items:
+          type: "object"
+          properties: {}
+  inline_response_400_1:
+    properties:
+      message:
+        type: "string"
+        example: "A store with name 'store1' already exists"
+  inline_response_200_6:
+    properties:
+      message:
+        type: "string"
+        example: "Store deleted"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
